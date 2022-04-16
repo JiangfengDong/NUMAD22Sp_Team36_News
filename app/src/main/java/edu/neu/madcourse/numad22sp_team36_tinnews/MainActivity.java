@@ -1,7 +1,6 @@
 package edu.neu.madcourse.numad22sp_team36_tinnews;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -9,13 +8,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import edu.neu.madcourse.numad22sp_team36_tinnews.model.NewsResponse;
-import edu.neu.madcourse.numad22sp_team36_tinnews.network.NewsAPI;
-import edu.neu.madcourse.numad22sp_team36_tinnews.network.RetrofitClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
