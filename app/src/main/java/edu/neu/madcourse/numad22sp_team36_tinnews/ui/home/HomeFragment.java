@@ -32,14 +32,17 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final String COUNTRY = "us";
+        final String TAG = "HomeFragment";
+
         NewsRepository repository = new NewsRepository();
         viewModel = new HomeViewModel(repository);
-        viewModel.setCountryInput("us");
+        viewModel.setCountryInput(COUNTRY);
         viewModel.getTopHeadlines().observe(
                 getViewLifecycleOwner(),
                 newsResponse -> {
                     if (newsResponse != null) {
-                        Log.d("HomeFragment", newsResponse.toString());
+                        Log.d(TAG, newsResponse.toString());
                     }
                 }
         );
