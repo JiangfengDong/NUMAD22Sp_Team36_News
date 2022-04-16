@@ -11,6 +11,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NewsRepository {
+
     private final NewsAPI newsAPI;
 
     public NewsRepository() {

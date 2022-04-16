@@ -3,6 +3,7 @@ package edu.neu.madcourse.numad22sp_team36_tinnews.model;
 import java.util.Objects;
 
 public class Article {
+
     public String author;
     public String content;
     public String description;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class NewsResponse {
+
     public Integer totalResults;
     public List<Article> articles;
     public String code;

@@ -9,11 +9,13 @@ import edu.neu.madcourse.numad22sp_team36_tinnews.model.NewsResponse;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
 
 public class HomeViewModel extends ViewModel {
+
     private final NewsRepository repository;
-    private final MutableLiveData<String> countryInput = new MutableLiveData<>();
+    private final MutableLiveData<String> countryInput;
 
     public HomeViewModel(NewsRepository newsRepository) {
         this.repository = newsRepository;
+        this.countryInput = new MutableLiveData<>();
     }
 
     public void setCountryInput(String country) {
