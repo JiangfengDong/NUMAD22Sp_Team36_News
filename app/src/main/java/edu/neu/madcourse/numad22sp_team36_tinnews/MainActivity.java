@@ -31,24 +31,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(navView, navController);
         NavigationUI.setupActionBarWithNavController(this, navController);
-
-        // Test Request
-        NewsAPI newsAPI = RetrofitClient.newInstance().create(NewsAPI.class);
-        newsAPI.getTopHeadlines("US").enqueue(new Callback<NewsResponse>() {
-            private final String TAG = "getTopHeadlines";
-
-            @Override
-            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                final String MSG = response.isSuccessful() ? response.body().toString() : response.toString();
-                Log.d(TAG, MSG);
-            }
-
-            @Override
-            public void onFailure(Call<NewsResponse> call, Throwable t) {
-                final String MSG = t.toString();
-                Log.d(TAG, MSG);
-            }
-        });
     }
 
     @Override
