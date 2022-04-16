@@ -37,4 +37,24 @@ public class NewsRepository {
         return topHeadlinesLiveData;
     }
 
+    public LiveData<NewsResponse> searchNews(String query) {
+        final int PAGE_SIZE = 40;
+        MutableLiveData<NewsResponse> everyThingLiveData = new MutableLiveData<>();
+        newsAPI.getEverything(query, PAGE_SIZE).enqueue(new Callback<NewsResponse>() {
+            @Override
+            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+                if (response.isSuccessful()) {
+                    everyThingLiveData.setValue(response.body());
+                } else {
+                    everyThingLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewsResponse> call, Throwable t) {
+                everyThingLiveData.setValue(null);
+            }
+        });
+        return everyThingLiveData;
+    }
 }
