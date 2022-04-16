@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.R;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
+import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsViewModelFactory;
 
 public class SearchFragment extends Fragment {
 
@@ -36,7 +38,7 @@ public class SearchFragment extends Fragment {
         final String TAG = "SearchFragment";
 
         NewsRepository repository = new NewsRepository();
-        viewModel = new SearchViewModel(repository);
+        viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(SearchViewModel.class);
         viewModel.setSearchInput(QUERY);
         viewModel.searchNews().observe(
                 getViewLifecycleOwner(),

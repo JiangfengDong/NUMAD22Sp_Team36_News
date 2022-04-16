@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.R;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
+import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsViewModelFactory;
 
 public class HomeFragment extends Fragment {
 
@@ -36,7 +38,7 @@ public class HomeFragment extends Fragment {
         final String TAG = "HomeFragment";
 
         NewsRepository repository = new NewsRepository();
-        viewModel = new HomeViewModel(repository);
+        viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(HomeViewModel.class);
         viewModel.setCountryInput(COUNTRY);
         viewModel.getTopHeadlines().observe(
                 getViewLifecycleOwner(),
