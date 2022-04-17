@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.neu.madcourse.numad22sp_team36_tinnews.R;
 import edu.neu.madcourse.numad22sp_team36_tinnews.databinding.FragmentSearchBinding;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsViewModelFactory;
@@ -35,6 +35,22 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.newsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (!query.isEmpty()) {
+                    viewModel.setSearchInput(query);
+                }
+                binding.newsSearchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         final String TAG = "SearchFragment";
 
