@@ -1,7 +1,6 @@
 package edu.neu.madcourse.numad22sp_team36_tinnews.ui.search;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.databinding.FragmentSearchBinding;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
@@ -36,6 +36,11 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SearchNewsAdapter newsAdapter = new SearchNewsAdapter();
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
+        binding.newsResultsRecyclerView.setLayoutManager(gridLayoutManager);
+        binding.newsResultsRecyclerView.setAdapter(newsAdapter);
+
         binding.newsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -52,15 +57,13 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        final String TAG = "SearchFragment";
-
         NewsRepository repository = new NewsRepository();
         viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(SearchViewModel.class);
         viewModel.searchNews().observe(
                 getViewLifecycleOwner(),
                 newsResponse -> {
                     if (newsResponse != null) {
-                        Log.d(TAG, newsResponse.toString());
+                        newsAdapter.setArticles(newsResponse.articles);
                     }
                 }
         );
