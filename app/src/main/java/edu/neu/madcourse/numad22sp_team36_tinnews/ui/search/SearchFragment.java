@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.R;
+import edu.neu.madcourse.numad22sp_team36_tinnews.databinding.FragmentSearchBinding;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsViewModelFactory;
 
 public class SearchFragment extends Fragment {
 
     private SearchViewModel viewModel;
+    private FragmentSearchBinding binding;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -26,20 +28,18 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final String QUERY = "Covid-19";
         final String TAG = "SearchFragment";
 
         NewsRepository repository = new NewsRepository();
         viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(SearchViewModel.class);
-        viewModel.setSearchInput(QUERY);
         viewModel.searchNews().observe(
                 getViewLifecycleOwner(),
                 newsResponse -> {
