@@ -26,6 +26,7 @@ public class CardSwipeAdapter extends RecyclerView.Adapter<CardSwipeAdapter.Card
     public void setArticles(List<Article> newsList) {
         articles.clear();
         articles.addAll(newsList);
+        notifyDataSetChanged();
     }
 
     @NonNull
