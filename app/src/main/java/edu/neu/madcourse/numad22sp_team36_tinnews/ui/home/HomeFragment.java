@@ -1,6 +1,7 @@
 package edu.neu.madcourse.numad22sp_team36_tinnews.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
+import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.StackFrom;
@@ -23,7 +25,7 @@ import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsViewModelFactory;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements CardStackListener {
 
     private HomeViewModel viewModel;
     private FragmentHomeBinding binding;
@@ -46,7 +48,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         CardSwipeAdapter swipeAdapter = new CardSwipeAdapter();
-        layoutManager = new CardStackLayoutManager(requireContext());
+        layoutManager = new CardStackLayoutManager(requireContext(), this);
         layoutManager.setStackFrom(StackFrom.Top);
         binding.homeCardStackView.setLayoutManager(layoutManager);
         binding.homeCardStackView.setAdapter(swipeAdapter);
@@ -72,5 +74,43 @@ public class HomeFragment extends Fragment {
         SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(direction).setDuration(Duration.Normal.duration).build();
         layoutManager.setSwipeAnimationSetting(setting);
         binding.homeCardStackView.swipe();
+    }
+
+
+    @Override
+    public void onCardDragging(Direction direction, float ratio) {
+
+    }
+
+    @Override
+    public void onCardSwiped(Direction direction) {
+        final String TAG = "CardStackView";
+        final String PREFIX_LIKE_MSG = "Liked ";
+        final String PREFIX_UNLIKE_MSG = "Unliked ";
+        if (direction == Direction.Left) {
+            Log.d(TAG, PREFIX_UNLIKE_MSG + layoutManager.getTopPosition());
+        } else if (direction == Direction.Right) {
+            Log.d(TAG, PREFIX_LIKE_MSG  + layoutManager.getTopPosition());
+        }
+    }
+
+    @Override
+    public void onCardRewound() {
+
+    }
+
+    @Override
+    public void onCardCanceled() {
+
+    }
+
+    @Override
+    public void onCardAppeared(View view, int position) {
+
+    }
+
+    @Override
+    public void onCardDisappeared(View view, int position) {
+
     }
 }
