@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 import edu.neu.madcourse.numad22sp_team36_tinnews.model.NewsResponse;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
 
@@ -22,8 +23,11 @@ public class HomeViewModel extends ViewModel {
         countryInput.setValue(country);
     }
 
+    public void setFavoriteArticleInput(Article article) {
+        repository.favoriteArticle(article);
+    }
+
     public LiveData<NewsResponse> getTopHeadlines() {
         return Transformations.switchMap(countryInput, repository::getTopHeadlines);
     }
-
 }

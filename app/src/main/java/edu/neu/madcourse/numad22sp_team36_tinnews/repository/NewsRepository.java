@@ -86,7 +86,7 @@ public class NewsRepository {
         protected Boolean doInBackground(Article... articles) {
             Article article = articles[0];
             try {
-                database.articleDAO().saveArticle(article);
+                database.articleDao().saveArticle(article);
             } catch (Exception e) {
                 return false;
             }

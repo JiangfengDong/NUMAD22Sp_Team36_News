@@ -92,6 +92,8 @@ public class HomeFragment extends Fragment implements CardStackListener {
         } else if (direction == Direction.Right) {
             Log.d(TAG, PREFIX_LIKE_MSG  + layoutManager.getTopPosition());
         }
+        Article article = articles.get(layoutManager.getTopPosition() - 1);
+        viewModel.setFavoriteArticleInput(article);
     }
 
     @Override

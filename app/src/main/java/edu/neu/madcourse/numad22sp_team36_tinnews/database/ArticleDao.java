@@ -1,6 +1,7 @@
 package edu.neu.madcourse.numad22sp_team36_tinnews.database;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -9,7 +10,8 @@ import java.util.List;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 
-public interface ArticleDAO {
+@Dao
+public interface ArticleDao {
 
     @Insert
     void saveArticle(Article article);
