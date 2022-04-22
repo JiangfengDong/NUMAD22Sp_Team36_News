@@ -63,6 +63,9 @@ public class HomeFragment extends Fragment {
                     }
                 }
         );
+
+        binding.homeLikeButton.setOnClickListener(v -> swipeCard(Direction.Right));
+        binding.homeUnlikeButton.setOnClickListener(v -> swipeCard(Direction.Left));
     }
 
     private void swipeCard(Direction direction) {
