@@ -11,7 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
+import com.yuyakaido.android.cardstackview.Direction;
+import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.StackFrom;
+import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import java.util.List;
 
@@ -60,5 +63,11 @@ public class HomeFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void swipeCard(Direction direction) {
+        SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(direction).setDuration(Duration.Normal.duration).build();
+        layoutManager.setSwipeAnimationSetting(setting);
+        binding.homeCardStackView.swipe();
     }
 }
