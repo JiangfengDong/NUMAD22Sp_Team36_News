@@ -1,8 +1,13 @@
 package edu.neu.madcourse.numad22sp_team36_tinnews.repository;
 
+import android.os.AsyncTask;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import edu.neu.madcourse.numad22sp_team36_tinnews.TinNewsApplication;
+import edu.neu.madcourse.numad22sp_team36_tinnews.database.TinNewsDatabase;
+import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 import edu.neu.madcourse.numad22sp_team36_tinnews.model.NewsResponse;
 import edu.neu.madcourse.numad22sp_team36_tinnews.network.NewsAPI;
 import edu.neu.madcourse.numad22sp_team36_tinnews.network.RetrofitClient;
@@ -13,9 +18,11 @@ import retrofit2.Response;
 public class NewsRepository {
 
     private final NewsAPI newsAPI;
+    private final TinNewsDatabase database;
 
     public NewsRepository() {
         newsAPI = RetrofitClient.newInstance().create(NewsAPI.class);
+        database = TinNewsApplication.getDatabase();
     }
 
     public LiveData<NewsResponse> getTopHeadlines(String country) {
@@ -57,5 +64,38 @@ public class NewsRepository {
             }
         });
         return everyThingLiveData;
+    }
+
+    public LiveData<Boolean> favoriteArticle(Article article) {
+        MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
+        new FavoriteAsyncTask(database, resultLiveData).execute(article);
+        return resultLiveData;
+    }
+
+    private static class FavoriteAsyncTask extends AsyncTask<Article, Void, Boolean> {
+
+        private final TinNewsDatabase database;
+        private final MutableLiveData<Boolean> liveData;
+
+        private FavoriteAsyncTask(TinNewsDatabase database, MutableLiveData<Boolean> liveData) {
+            this.database = database;
+            this.liveData = liveData;
+        }
+
+        @Override
+        protected Boolean doInBackground(Article... articles) {
+            Article article = articles[0];
+            try {
+                database.articleDAO().saveArticle(article);
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            liveData.setValue(success);
+        }
     }
 }
