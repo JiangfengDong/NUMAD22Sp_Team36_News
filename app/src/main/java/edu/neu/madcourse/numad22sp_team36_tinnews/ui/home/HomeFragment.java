@@ -76,7 +76,6 @@ public class HomeFragment extends Fragment implements CardStackListener {
         binding.homeCardStackView.swipe();
     }
 
-
     @Override
     public void onCardDragging(Direction direction, float ratio) {
 
@@ -90,10 +89,10 @@ public class HomeFragment extends Fragment implements CardStackListener {
         if (direction == Direction.Left) {
             Log.d(TAG, PREFIX_UNLIKE_MSG + layoutManager.getTopPosition());
         } else if (direction == Direction.Right) {
-            Log.d(TAG, PREFIX_LIKE_MSG  + layoutManager.getTopPosition());
+            Log.d(TAG, PREFIX_LIKE_MSG + layoutManager.getTopPosition());
+            Article article = articles.get(layoutManager.getTopPosition() - 1);
+            viewModel.setFavoriteArticleInput(article);
         }
-        Article article = articles.get(layoutManager.getTopPosition() - 1);
-        viewModel.setFavoriteArticleInput(article);
     }
 
     @Override

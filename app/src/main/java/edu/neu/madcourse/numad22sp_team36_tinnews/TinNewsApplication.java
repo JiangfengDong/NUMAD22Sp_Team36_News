@@ -10,7 +10,7 @@ import edu.neu.madcourse.numad22sp_team36_tinnews.database.TinNewsDatabase;
 
 public class TinNewsApplication extends Application {
 
-    private static final String DATABASE_FILE_NAME = "tinnews_db";
+    private static final String ROOM_DATABASE_FILE_NAME = "tinnews_db";
 
     private static TinNewsDatabase database;
 
@@ -18,7 +18,7 @@ public class TinNewsApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Stetho.initializeWithDefaults(this);
-        database = Room.databaseBuilder(this, TinNewsDatabase.class, DATABASE_FILE_NAME).build();
+        database = Room.databaseBuilder(this, TinNewsDatabase.class, ROOM_DATABASE_FILE_NAME).build();
     }
 
     public static TinNewsDatabase getDatabase() {

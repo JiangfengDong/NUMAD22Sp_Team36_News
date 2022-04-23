@@ -9,7 +9,7 @@ import edu.neu.madcourse.numad22sp_team36_tinnews.TinNewsApplication;
 import edu.neu.madcourse.numad22sp_team36_tinnews.database.TinNewsDatabase;
 import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 import edu.neu.madcourse.numad22sp_team36_tinnews.model.NewsResponse;
-import edu.neu.madcourse.numad22sp_team36_tinnews.network.NewsAPI;
+import edu.neu.madcourse.numad22sp_team36_tinnews.network.NewsApi;
 import edu.neu.madcourse.numad22sp_team36_tinnews.network.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,17 +17,17 @@ import retrofit2.Response;
 
 public class NewsRepository {
 
-    private final NewsAPI newsAPI;
+    private final NewsApi newsApi;
     private final TinNewsDatabase database;
 
     public NewsRepository() {
-        newsAPI = RetrofitClient.newInstance().create(NewsAPI.class);
+        newsApi = RetrofitClient.newInstance().create(NewsApi.class);
         database = TinNewsApplication.getDatabase();
     }
 
     public LiveData<NewsResponse> getTopHeadlines(String country) {
         MutableLiveData<NewsResponse> topHeadlinesLiveData = new MutableLiveData<>();
-        newsAPI.getTopHeadlines(country).enqueue(new Callback<NewsResponse>() {
+        newsApi.getTopHeadlines(country).enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
                 if (response.isSuccessful()) {
@@ -48,7 +48,7 @@ public class NewsRepository {
     public LiveData<NewsResponse> searchNews(String query) {
         final int PAGE_SIZE = 40;
         MutableLiveData<NewsResponse> everyThingLiveData = new MutableLiveData<>();
-        newsAPI.getEverything(query, PAGE_SIZE).enqueue(new Callback<NewsResponse>() {
+        newsApi.getEverything(query, PAGE_SIZE).enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
                 if (response.isSuccessful()) {
