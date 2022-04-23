@@ -1,12 +1,11 @@
 package edu.neu.madcourse.numad22sp_team36_tinnews.ui.save;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.R;
 

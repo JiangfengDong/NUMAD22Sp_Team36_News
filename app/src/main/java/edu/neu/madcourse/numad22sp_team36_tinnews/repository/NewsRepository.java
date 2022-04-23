@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.List;
+
 import edu.neu.madcourse.numad22sp_team36_tinnews.TinNewsApplication;
 import edu.neu.madcourse.numad22sp_team36_tinnews.database.TinNewsDatabase;
 import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
@@ -70,6 +72,14 @@ public class NewsRepository {
         MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
         new FavoriteAsyncTask(database, resultLiveData).execute(article);
         return resultLiveData;
+    }
+
+    public LiveData<List<Article>> getAllSavedArticles() {
+        return database.articleDao().getAllArticles();
+    }
+
+    public void deleteSavedArticle(Article article) {
+        AsyncTask.execute(() -> database.articleDao().deleteArticle(article));
     }
 
     private static class FavoriteAsyncTask extends AsyncTask<Article, Void, Boolean> {
