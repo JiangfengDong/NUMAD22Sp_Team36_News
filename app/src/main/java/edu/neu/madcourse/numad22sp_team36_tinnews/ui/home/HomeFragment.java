@@ -71,7 +71,10 @@ public class HomeFragment extends Fragment implements CardStackListener {
     }
 
     private void swipeCard(Direction direction) {
-        SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder().setDirection(direction).setDuration(Duration.Normal.duration).build();
+        SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
+                .setDirection(direction)
+                .setDuration(Duration.Normal.duration)
+                .build();
         layoutManager.setSwipeAnimationSetting(setting);
         binding.homeCardStackView.swipe();
     }

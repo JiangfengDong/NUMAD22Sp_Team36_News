@@ -12,5 +12,4 @@ public interface NewsApi {
 
     @GET("everything")
     Call<NewsResponse> getEverything(@Query("q") String query, @Query("pageSize") int pageSize);
-
 }
