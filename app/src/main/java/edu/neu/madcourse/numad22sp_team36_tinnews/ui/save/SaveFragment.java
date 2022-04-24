@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.databinding.FragmentSaveBinding;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
@@ -36,13 +37,17 @@ public class SaveFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SavedNewsAdapter savedNewsAdapter = new SavedNewsAdapter();
+        binding.newsSavedRecyclerView.setAdapter(savedNewsAdapter);
+        binding.newsSavedRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
         NewsRepository repository = new NewsRepository();
         viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(SaveViewModel.class);
         viewModel.getAllSavedArticles().observe(
                 getViewLifecycleOwner(),
                 savedArticles -> {
                     if (savedArticles != null) {
-                        Log.d("SaveFragment", savedArticles.toString());
+                        savedNewsAdapter.setArticles(savedArticles);
                     }
                 });
     }
