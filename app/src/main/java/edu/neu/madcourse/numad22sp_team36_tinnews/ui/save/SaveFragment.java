@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import edu.neu.madcourse.numad22sp_team36_tinnews.databinding.FragmentSaveBinding;
+import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsRepository;
 import edu.neu.madcourse.numad22sp_team36_tinnews.repository.NewsViewModelFactory;
 
@@ -50,5 +51,17 @@ public class SaveFragment extends Fragment {
                         savedNewsAdapter.setArticles(savedArticles);
                     }
                 });
+
+        savedNewsAdapter.setItemCallback(new SavedNewsAdapter.ItemCallback() {
+            @Override
+            public void onOpenDetails(Article article) {
+                Log.d("onOpenDetails", article.toString());
+            }
+
+            @Override
+            public void onRemoveFavorite(Article article) {
+                viewModel.deleteSavedArticle(article);
+            }
+        });
     }
 }
