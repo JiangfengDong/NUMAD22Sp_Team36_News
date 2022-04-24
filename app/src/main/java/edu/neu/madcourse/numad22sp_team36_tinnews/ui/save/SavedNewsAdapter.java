@@ -19,11 +19,16 @@ import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.SavedNewsViewHolder> {
 
     private final List<Article> articles = new ArrayList<>();
+    private ItemCallback itemCallback;
 
     public void setArticles(List<Article> newsList) {
         articles.clear();
         articles.addAll(newsList);
         notifyDataSetChanged();
+    }
+
+    public void setItemCallback(ItemCallback itemCallback) {
+        this.itemCallback = itemCallback;
     }
 
     @NonNull
@@ -38,11 +43,21 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.Save
         Article article = articles.get(position);
         holder.authorTextView.setText(article.author);
         holder.descriptionTextView.setText(article.description);
+
+        holder.favoriteIcon.setOnClickListener(v -> itemCallback.onRemoveFavorite(article));
+        holder.itemView.setOnClickListener(v -> itemCallback.onOpenDetails(article));
     }
 
     @Override
     public int getItemCount() {
         return articles.size();
+    }
+
+    interface ItemCallback {
+
+        void onOpenDetails(Article article);
+
+        void onRemoveFavorite(Article article);
     }
 
     public static class SavedNewsViewHolder extends RecyclerView.ViewHolder {
