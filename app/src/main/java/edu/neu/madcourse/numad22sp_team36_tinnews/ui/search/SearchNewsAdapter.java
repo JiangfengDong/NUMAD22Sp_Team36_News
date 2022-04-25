@@ -20,12 +20,17 @@ import edu.neu.madcourse.numad22sp_team36_tinnews.model.Article;
 
 public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.SearchNewsViewHolder> {
 
-    private List<Article> articles = new ArrayList<>();
+    private final List<Article> articles = new ArrayList<>();
+    private ItemCallback itemCallback;
 
     public void setArticles(List<Article> newsList) {
         articles.clear();
         articles.addAll(newsList);
         notifyDataSetChanged();
+    }
+
+    public void setItemCallback(ItemCallback itemCallback) {
+        this.itemCallback = itemCallback;
     }
 
     @NonNull
@@ -40,11 +45,17 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
         Article article = articles.get(position);
         holder.itemTitleTextView.setText(article.title);
         Picasso.get().load(article.urlToImage).resize(200, 200).into(holder.itemImageView);
+        holder.itemView.setOnClickListener(v -> itemCallback.onOpenDetails(article));
     }
 
     @Override
     public int getItemCount() {
         return articles.size();
+    }
+
+    interface ItemCallback {
+
+        void onOpenDetails(Article article);
     }
 
     public static class SearchNewsViewHolder extends RecyclerView.ViewHolder {
