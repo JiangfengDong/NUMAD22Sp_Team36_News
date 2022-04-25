@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.save.SaveFragment">
+    tools:context="edu.neu.madcourse.numad22sp_team36_news.ui.save.SaveFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/news_saved_recycler_view"

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
-rootProject.name = "NUMAD22Sp_Team36_TinNews"
+rootProject.name = "NUMAD22Sp_Team36_News"
 include ':app'

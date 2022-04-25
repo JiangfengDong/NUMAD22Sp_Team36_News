@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.neu.madcourse.numad22sp_team36_tinnews">
+    package="edu.neu.madcourse.numad22sp_team36_news">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".TinNewsApplication"
+        android:name="edu.neu.madcourse.numad22sp_team36_news.NewsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_jiangfeng"
         android:label="@string/app_name"
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD22Sp_Team36_TinNews">
         <activity
-            android:name=".MainActivity"
+            android:name="edu.neu.madcourse.numad22sp_team36_news.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

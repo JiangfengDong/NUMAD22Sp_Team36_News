@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.home.HomeFragment">
+    tools:context="edu.neu.madcourse.numad22sp_team36_news.ui.home.HomeFragment">
 
     <com.yuyakaido.android.cardstackview.CardStackView
         android:id="@+id/home_card_stack_view"
