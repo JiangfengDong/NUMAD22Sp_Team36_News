@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="edu.neu.madcourse.numad22sp_team36_news.NewsApplication"
+        android:name=".NewsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_jiangfeng"
         android:label="@string/app_name"
@@ -13,11 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMAD22Sp_Team36_News">
         <activity
-            android:name="edu.neu.madcourse.numad22sp_team36_news.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
