@@ -1,7 +1,5 @@
 package edu.neu.madcourse.numad22sp_team36_news;
 
-import static android.app.Service.START_STICKY;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -19,9 +17,9 @@ import java.util.TimerTask;
 public class NotificationService extends Service {
     private Timer timer;
     private TimerTask timerTask;
-    private int MILLIS_PER_SEC = 1000;
-    private int SEC_PER_HOUR = 60 * 60;
-    private int INTERVAL_HOURS = 8;
+    private final int MILLIS_PER_SEC = 1000;
+    private final int SEC_PER_HOUR = 60 * 60;
+    private final int INTERVAL_HOURS = 8;
 
     @Override
     public IBinder onBind(Intent arg0) {

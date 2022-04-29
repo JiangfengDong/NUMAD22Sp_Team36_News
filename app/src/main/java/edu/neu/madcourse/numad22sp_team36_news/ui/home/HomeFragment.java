@@ -103,21 +103,8 @@ public class HomeFragment extends Fragment implements CardStackListener {
             Article article = articles.get(layoutManager.getTopPosition() - 1);
             viewModel.setFavoriteArticleInput(article);
 
-            // notification
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("Successful Save Notification", "Successful Save Notification", NotificationManager.IMPORTANCE_DEFAULT);
-                NotificationManager manager = getActivity().getSystemService(NotificationManager.class);
-                manager.createNotificationChannel(channel);
-            }
-            String message = "Successfully saved the article locally. Enjoy reading :)";
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "Successful Save Notification");
-            builder.setContentTitle("Now you can read the article offline!");
-            builder.setContentText(message);
-            builder.setSmallIcon(R.drawable.ic_thumb_up_24dp);
-            builder.setAutoCancel(true);
-
-            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity());
-            managerCompat.notify(1, builder.build());
+            // push notification after saving the article
+            pushNotification();
         }
     }
 
@@ -139,5 +126,22 @@ public class HomeFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDisappeared(View view, int position) {
 
+    }
+
+    private void pushNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("Successful Save Notification", "Successful Save Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getActivity().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        String message = "Successfully saved the article to local device. Enjoy reading :)";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "Successful Save Notification");
+        builder.setContentTitle("Now you can read the article offline!");
+        builder.setContentText(message);
+        builder.setSmallIcon(R.drawable.ic_thumb_up_24dp);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity());
+        managerCompat.notify(1, builder.build());
     }
 }
