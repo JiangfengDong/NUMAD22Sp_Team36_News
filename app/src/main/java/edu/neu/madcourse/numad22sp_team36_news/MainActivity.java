@@ -1,10 +1,7 @@
 package edu.neu.madcourse.numad22sp_team36_news;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,13 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
     private Button testBtn;
+    private Intent notificationIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        cancelAlarm();
 
         testBtn = findViewById(R.id.testBtn);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -68,35 +64,18 @@ public class MainActivity extends AppCompatActivity {
         return navController.navigateUp();
     }
 
-    private void startAlarm() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, 10000, pendingIntent);
-    }
-
-    private void cancelAlarm() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.cancel(pendingIntent);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (notificationIntent != null) {
+            stopService(notificationIntent);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        startAlarm();
+        notificationIntent = new Intent(this, NotificationService.class);
+        startService(notificationIntent);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        startAlarm();
-    }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        startService(new Intent(this, NotificationService.class));
-//    }
 }
