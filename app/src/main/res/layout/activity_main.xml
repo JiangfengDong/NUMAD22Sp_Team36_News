@@ -25,10 +25,4 @@
         app:itemTextColor="@android:color/black"
         app:menu="@menu/bottom_nav_menu" />
 
-    <Button
-        android:id="@+id/testBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
 </LinearLayout>
