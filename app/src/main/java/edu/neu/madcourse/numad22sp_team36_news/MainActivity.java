@@ -2,6 +2,7 @@ package edu.neu.madcourse.numad22sp_team36_news;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -60,5 +61,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, NotificationService.class));
     }
 }
