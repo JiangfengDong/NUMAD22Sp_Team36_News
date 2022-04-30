@@ -1,5 +1,8 @@
 package edu.neu.madcourse.numad22sp_team36_news.ui.home;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,6 +25,8 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import java.util.List;
 
+import edu.neu.madcourse.numad22sp_team36_news.MainActivity;
+import edu.neu.madcourse.numad22sp_team36_news.R;
 import edu.neu.madcourse.numad22sp_team36_news.repository.NewsViewModelFactory;
 import edu.neu.madcourse.numad22sp_team36_news.databinding.FragmentHomeBinding;
 import edu.neu.madcourse.numad22sp_team36_news.model.Article;
@@ -95,6 +102,9 @@ public class HomeFragment extends Fragment implements CardStackListener {
             Log.d(TAG, PREFIX_LIKE_MSG + layoutManager.getTopPosition());
             Article article = articles.get(layoutManager.getTopPosition() - 1);
             viewModel.setFavoriteArticleInput(article);
+
+            // push notification after saving the article
+            pushNotification();
         }
     }
 
@@ -116,5 +126,22 @@ public class HomeFragment extends Fragment implements CardStackListener {
     @Override
     public void onCardDisappeared(View view, int position) {
 
+    }
+
+    private void pushNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("Successful Save Notification", "Successful Save Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getActivity().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        String message = "Successfully saved the article to local device. Enjoy reading :)";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "Successful Save Notification");
+        builder.setContentTitle("Now you can read the article offline!");
+        builder.setContentText(message);
+        builder.setSmallIcon(R.drawable.ic_thumb_up_24dp);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity());
+        managerCompat.notify(1, builder.build());
     }
 }
