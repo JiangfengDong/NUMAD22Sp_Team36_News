@@ -10,7 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import edu.neu.madcourse.numad22sp_team36_news.R;
+import edu.neu.madcourse.numad22sp_team36_news.notification.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
 

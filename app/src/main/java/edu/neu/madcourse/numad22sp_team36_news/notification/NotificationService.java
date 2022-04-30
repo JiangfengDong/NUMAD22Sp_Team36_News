@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad22sp_team36_news;
+package edu.neu.madcourse.numad22sp_team36_news.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +13,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import edu.neu.madcourse.numad22sp_team36_news.R;
 
 public class NotificationService extends Service {
     private Timer timer;
@@ -55,7 +57,7 @@ public class NotificationService extends Service {
 
         // schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
         // timer.schedule(timerTask, 5000, 10000); // test
-        // push notification after the user leaves 10 hours
+        // push notification after the user leaves 8 hours
         timer.schedule(timerTask, MILLIS_PER_SEC * SEC_PER_HOUR * INTERVAL_HOURS, MILLIS_PER_SEC * SEC_PER_HOUR * INTERVAL_HOURS);
     }
 
