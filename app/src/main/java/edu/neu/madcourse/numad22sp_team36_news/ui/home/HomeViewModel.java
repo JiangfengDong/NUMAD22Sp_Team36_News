@@ -45,4 +45,9 @@ public class HomeViewModel extends ViewModel {
         recommendedArticles.setValue(recommended);
     }
 
+    //Get recommendedArticles.
+    public LiveData<NewsResponse> getRecommendedArticles() {
+        return Transformations.switchMap(recommendedArticles, repository::getRecommendedArticles);
+    }
+
 }
