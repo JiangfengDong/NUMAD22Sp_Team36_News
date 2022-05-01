@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -68,6 +69,21 @@ public class HomeFragment extends Fragment implements CardStackListener {
         MyLiveData liveDataManager = new MyLiveData();
         liveDataManager.addSavedArticlesSource(viewModel.getAllFavoriteArticles());
 
+        //Recommend relevant favorite articles according to the first five fields of the article content and
+        // If there is no saved articles, recommend the default articles.
+        liveDataManager.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean finish) {
+                if(finish) {
+                    if(0 != liveDataManager.savedArticles.size() && null != liveDataManager.savedArticles.get(0).content) {
+                        viewModel.setRecommendedArticles(liveDataManager.savedArticles.get(0).content.toString().substring(1, 6));
+                    }else{
+                        viewModel.setRecommendedArticles("US");
+                    }
+                }
+
+            }
+        });
 
 
 

@@ -15,10 +15,13 @@ public class HomeViewModel extends ViewModel {
 
     private final NewsRepository repository;
     private final MutableLiveData<String> countryInput;
+    private final MutableLiveData<String> recommendedArticles;
+
 
     public HomeViewModel(NewsRepository newsRepository) {
         this.repository = newsRepository;
         this.countryInput = new MutableLiveData<>();
+        this.recommendedArticles = new MutableLiveData<>();
     }
 
     public void setCountryInput(String country) {
@@ -37,4 +40,9 @@ public class HomeViewModel extends ViewModel {
     public LiveData<List<Article>> getAllFavoriteArticles() {
         return repository.getAllSavedArticles();
     }
+
+    public void setRecommendedArticles(String recommended) {
+        recommendedArticles.setValue(recommended);
+    }
+
 }
