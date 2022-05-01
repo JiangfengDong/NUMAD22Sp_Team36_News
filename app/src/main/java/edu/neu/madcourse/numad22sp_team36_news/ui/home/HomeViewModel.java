@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import java.util.List;
+
 import edu.neu.madcourse.numad22sp_team36_news.model.Article;
 import edu.neu.madcourse.numad22sp_team36_news.model.NewsResponse;
 import edu.neu.madcourse.numad22sp_team36_news.repository.NewsRepository;
@@ -29,5 +31,10 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<NewsResponse> getTopHeadlines() {
         return Transformations.switchMap(countryInput, repository::getTopHeadlines);
+    }
+
+    //Get the news from the save page.
+    public LiveData<List<Article>> getAllFavoriteArticles() {
+        return repository.getAllSavedArticles();
     }
 }

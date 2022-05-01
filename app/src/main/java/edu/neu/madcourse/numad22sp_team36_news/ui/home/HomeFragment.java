@@ -63,6 +63,16 @@ public class HomeFragment extends Fragment implements CardStackListener {
         NewsRepository repository = new NewsRepository();
         viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(HomeViewModel.class);
         viewModel.setCountryInput(getResources().getConfiguration().locale.getCountry());
+
+        //Retrieve the favorite articles collected by the user in the save page from the database
+        MyLiveData liveDataManager = new MyLiveData();
+        liveDataManager.addSavedArticlesSource(viewModel.getAllFavoriteArticles());
+
+
+
+
+
+
         viewModel.getTopHeadlines().observe(
                 getViewLifecycleOwner(),
                 newsResponse -> {
