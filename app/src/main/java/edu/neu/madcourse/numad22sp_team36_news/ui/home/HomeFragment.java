@@ -85,19 +85,29 @@ public class HomeFragment extends Fragment implements CardStackListener {
             }
         });
 
-
-
-
-
-        viewModel.getTopHeadlines().observe(
-                getViewLifecycleOwner(),
-                newsResponse -> {
-                    if (newsResponse != null) {
-                        articles = newsResponse.articles;
-                        swipeAdapter.setArticles(articles);
+       //Display the recommended articles on the home page according to the user's save articles or the user's position.
+        if(MainActivity.getRecommendMode() % 2 == 0) {
+            viewModel.getRecommendedArticles().observe(
+                    getViewLifecycleOwner(),
+                    newsResponse -> {
+                        if (newsResponse != null) {
+                            articles = newsResponse.articles;
+                            swipeAdapter.setArticles(articles);
+                        }
                     }
-                }
-        );
+            );
+        }else {
+            viewModel.getTopHeadlines().observe(
+                    getViewLifecycleOwner(),
+                    newsResponse -> {
+                        if (newsResponse != null) {
+                            articles = newsResponse.articles;
+                            swipeAdapter.setArticles(articles);
+                        }
+                    }
+            );
+        }
+
 
         binding.homeLikeButton.setOnClickListener(v -> swipeCard(Direction.Right));
         binding.homeUnlikeButton.setOnClickListener(v -> swipeCard(Direction.Left));

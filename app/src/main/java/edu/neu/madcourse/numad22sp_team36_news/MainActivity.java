@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
     private Intent notificationIntent;
+    private static int ArticlesRecommendMode; //The news mode recommended to users is random
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(navView, navController);
         NavigationUI.setupActionBarWithNavController(this, navController);
+        ArticlesRecommendMode = (int)(Math.random() * 10);
     }
 
     @Override
@@ -48,4 +50,9 @@ public class MainActivity extends AppCompatActivity {
         notificationIntent = new Intent(this, NotificationService.class);
         startService(notificationIntent);
     }
+
+    public static int getRecommendMode() {
+        return ArticlesRecommendMode;
+    }
+
 }
