@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -63,15 +64,54 @@ public class HomeFragment extends Fragment implements CardStackListener {
         NewsRepository repository = new NewsRepository();
         viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(HomeViewModel.class);
         viewModel.setCountryInput(getResources().getConfiguration().locale.getCountry());
-        viewModel.getTopHeadlines().observe(
-                getViewLifecycleOwner(),
-                newsResponse -> {
-                    if (newsResponse != null) {
-                        articles = newsResponse.articles;
-                        swipeAdapter.setArticles(articles);
+
+        //Retrieve the favorite articles collected by the user in the save page from the database
+        MyLiveData liveDataManager = new MyLiveData();
+        liveDataManager.addSavedArticlesSource(viewModel.getAllFavoriteArticles());
+
+        //Recommend relevant favorite articles according to the first five fields of the article content and
+        // If there is no saved articles, recommend the default articles.
+        liveDataManager.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean finish) {
+                if(finish) {
+                    if(0 != liveDataManager.savedArticles.size() && null != liveDataManager.savedArticles.get(0).content) {
+                        String content = liveDataManager.savedArticles.get(0).content;
+                        String[] words = content.split(" ");
+                        int wordIndex = (int) (Math.random() * words.length);
+                        viewModel.setRecommendedArticles(words[wordIndex]);
+
+                    }else{
+                        viewModel.setRecommendedArticles(getResources().getConfiguration().locale.getCountry());
                     }
                 }
-        );
+
+            }
+        });
+
+       //Display the recommended articles on the home page according to the user's save articles or the user's position.
+        if(MainActivity.getRecommendMode() % 2 == 0) {
+            viewModel.getRecommendedArticles().observe(
+                    getViewLifecycleOwner(),
+                    newsResponse -> {
+                        if (newsResponse != null) {
+                            articles = newsResponse.articles;
+                            swipeAdapter.setArticles(articles);
+                        }
+                    }
+            );
+        }else {
+            viewModel.getTopHeadlines().observe(
+                    getViewLifecycleOwner(),
+                    newsResponse -> {
+                        if (newsResponse != null) {
+                            articles = newsResponse.articles;
+                            swipeAdapter.setArticles(articles);
+                        }
+                    }
+            );
+        }
+
 
         binding.homeLikeButton.setOnClickListener(v -> swipeCard(Direction.Right));
         binding.homeUnlikeButton.setOnClickListener(v -> swipeCard(Direction.Left));
