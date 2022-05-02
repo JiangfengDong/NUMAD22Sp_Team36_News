@@ -15,7 +15,7 @@ public class MyLiveData extends MediatorLiveData<Boolean> {
 
     public void addSavedArticlesSource(LiveData<List<Article>> source) {
         addSource(source, (Observer<List<Article>>) articlesResult -> {
-            savedArticles = articlesResult;   //Store articles from the savePage
+            savedArticles = articlesResult;   //use savedArticles Store articles from the savePage
             finishCount++;
             postValue(finishCount == 1);
         });

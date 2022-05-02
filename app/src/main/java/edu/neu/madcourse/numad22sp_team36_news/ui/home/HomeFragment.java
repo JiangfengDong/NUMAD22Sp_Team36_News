@@ -76,9 +76,13 @@ public class HomeFragment extends Fragment implements CardStackListener {
             public void onChanged(Boolean finish) {
                 if(finish) {
                     if(0 != liveDataManager.savedArticles.size() && null != liveDataManager.savedArticles.get(0).content) {
-                        viewModel.setRecommendedArticles(liveDataManager.savedArticles.get(0).content.toString().substring(1, 6));
+                        String content = liveDataManager.savedArticles.get(0).content;
+                        String[] words = content.split(" ");
+                        int wordIndex = (int) (Math.random() * words.length);
+                        viewModel.setRecommendedArticles(words[wordIndex]);
+
                     }else{
-                        viewModel.setRecommendedArticles("US");
+                        viewModel.setRecommendedArticles(getResources().getConfiguration().locale.getCountry());
                     }
                 }
 
