@@ -1,22 +1,38 @@
 package edu.neu.madcourse.numad22sp_team36_news.ui.home;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationRequest;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.Direction;
@@ -24,7 +40,9 @@ import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import edu.neu.madcourse.numad22sp_team36_news.MainActivity;
 import edu.neu.madcourse.numad22sp_team36_news.R;
@@ -39,6 +57,14 @@ public class HomeFragment extends Fragment implements CardStackListener {
     private FragmentHomeBinding binding;
     private CardStackLayoutManager layoutManager;
     private List<Article> articles;
+
+    private LocationCallback locationCallback;
+    public LocationRequest mLocationRequest;
+    private FusedLocationProviderClient fusedLocationClient;
+    private boolean requestingLocationUpdates;
+
+
+    private String localCountry="";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -101,6 +127,10 @@ public class HomeFragment extends Fragment implements CardStackListener {
                     }
             );
         }else {
+            //TODO:request position, then input into setCountryInput()
+            getLocalcountry();
+            //viewModel.setCountryInput(getResources().getConfiguration().locale.getCountry());
+            viewModel.setCountryInput(localCountry);
             viewModel.getTopHeadlines().observe(
                     getViewLifecycleOwner(),
                     newsResponse -> {
@@ -184,4 +214,131 @@ public class HomeFragment extends Fragment implements CardStackListener {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity());
         managerCompat.notify(1, builder.build());
     }
+
+    public void getLocalcountry(){
+
+        this.localCountry=getResources().getConfiguration().locale.getCountry();
+        if (ContextCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            // You can use the API that requires the permission.
+            requestingLocationUpdates = true;
+        } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // In an educational UI, explain to the user why your app requires this
+            // permission for a specific feature to behave as expected. In this UI,
+            // include a "cancel" or "no thanks" button that allows the user to
+            // continue using your app without granting the permission.
+            showInContextUI();
+        } else {
+            // You can directly ask for the permission.
+            doRequestLocationPermission();
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                List<Location> locationList = locationResult.getLocations();
+                if (locationResult == null) {
+                    return;
+                }
+                Location location = locationList.get(locationList.size() - 1);
+
+                Geocoder geocoder=new Geocoder(getActivity(), Locale.getDefault());
+                List<Address> addresses= null;
+                try {
+                    addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(addresses!=null||addresses.size()>0){
+                    String locality=addresses.get(0).getLocality()+addresses.get(0).getCountryName();
+                    localCountry=locality;
+                }
+
+            }
+        };
+
+    }
+
+    private void doRequestLocationPermission() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0); //TODO
+    }
+
+    private void showInContextUI() {
+        new AlertDialog.Builder(getActivity()).setTitle("Location Permission Needed")
+                .setMessage("This app needs the Location permission, please accept to use location functionality")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        doRequestLocationPermission();
+                    }
+                }).create().show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //mLocationPermissionGranted = false;
+
+        if (requestCode != 0) {
+            return;
+        }
+
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            requestingLocationUpdates = true;
+
+        } else {
+            // permission denied, boo! Disable the
+            // functionality that depends on this permission.
+            Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (requestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+
+    private void startLocationUpdates() {
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        com.google.android.gms.location.LocationRequest locationRequest= new com.google.android.gms.location.LocationRequest();
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
+
+
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
+
 }
